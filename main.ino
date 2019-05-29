@@ -1,25 +1,30 @@
-// Include the Servo library
 #include <Servo.h>
-// Declare the Servo pin
-int servoPin = 3;
-// Create a servo object
-Servo Servo1;
+
+#define PIN_SRV 13
+#define PIN_L_PHTRSR A0
+#define PIN_R_PHTRSR A1
+
+Servo _srv;
+int l_phtrsr;
+int r_phtrsr;
+int srv_position = 0;
 
 void setup()
 {
-	// We need to attach the servo to the used pin number
-	Servo1.attach(servoPin);
+	_srv.attach(PIN_SRV);
 }
 
 void loop()
 {
-	// Make servo go to 0 degrees
-	Servo1.write(0);
-	delay(1000);
-	// Make servo go to 90 degrees
-	Servo1.write(90);
-	delay(1000);
-	// Make servo go to 180 degrees
-	Servo1.write(180);
-	delay(1000);
+	l_phtrsr = analogRead(PIN_L_PHTRSR);
+	r_phtrsr = analogRead(PIN_R_PHTRSR);
+
+	l_phtrsr = map(l_phtrsr, 0, 1023, 0, 180);
+	r_phtrsr = map(r_phtrsr, 0, 1023, 0, 180);
+	
+	while (l_phtrsr != r_phtrsr)
+		if (l_phtrsr > r_phtrsr && srv_position < 180)
+			_srv.write(++srv_position);
+		else if (l_phtrsr < r_phtrsr && srv_position >= 0)
+			_srv.write(--srv_position);
 }
