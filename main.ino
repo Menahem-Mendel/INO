@@ -46,7 +46,7 @@ void movesrv(int l, int r)
 
 	srv_position += (l_phtrsr - r_phtrsr)					резко
 		или
-	srv_position += ((l_phtrsr - r_phtrsr) > 0) ? 1 : 0 	постепенно
+	srv_position += ((l_phtrsr - r_phtrsr) > 0) ? 1 : 0		постепенно
 	! если значение положительное то влево
 	! если значение отрицательно то вправо
 
