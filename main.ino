@@ -8,7 +8,7 @@
 #define PIN_L_PHTRSR A0 // пин ввода: левый фоторезистор
 #define PIN_R_PHTRSR A1 // пин ввода: правый фоторезистор
 #define PIN_SRV 13		// пин вывода: на сервопривод
-#define SENSITIVITY 180 // чувствительность
+#define SENSITIVITY 180 // чувствительность от 0 до n
 
 Servo _srv;   // сервопривод
 int l_phtrsr; // значения принимамые левым фоторезистором
