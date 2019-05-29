@@ -44,9 +44,10 @@ void movesrv(int l, int r)
 	l_phtrsr = map(l_phtrsr, 0, 1023, 0, SENSITIVITY);
 	r_phtrsr = map(r_phtrsr, 0, 1023, 0, SENSITIVITY);
 
-	srv_position += (l_phtrsr - r_phtrsr)					резко
+	srv_position += ((l_phtrsr - r_phtrsr) / 2)				резко
+															деление на 2 нужно так как нам нужно равные значения в обих фоторезисторах
 		или
-	srv_position += ((l_phtrsr - r_phtrsr) > 0) ? 1 : 0		постепенно
+	srv_position += ((l_phtrsr - r_phtrsr) / 2 > 0) ? 1 : -1		постепенно
 	! если значение положительное то влево
 	! если значение отрицательно то вправо
 
