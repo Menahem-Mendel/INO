@@ -40,13 +40,13 @@ void movesrv(int l, int r)
 }
 
 /*
-		поменять алгоритм на
-			l_phtrsr = map(l_phtrsr, 0, 1023, 0, SENSITIVITY);
-			r_phtrsr = map(r_phtrsr, 0, 1023, 0, SENSITIVITY);
+поменять алгоритм на
+	l_phtrsr = map(l_phtrsr, 0, 1023, 0, SENSITIVITY);
+	r_phtrsr = map(r_phtrsr, 0, 1023, 0, SENSITIVITY);
 
-			srv_position += (l_phtrsr - r_phtrsr)
-			! если значение положительное то влево
-			! если значение отрицательно то вправо
+	srv_position += (l_phtrsr - r_phtrsr)
+	! если значение положительное то влево
+	! если значение отрицательно то вправо
 
-		алгоритм не доработан так как значение srv_position может выйти за рамки
+алгоритм не доработан так как значение srv_position может выйти за рамки
 */
