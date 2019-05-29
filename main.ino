@@ -1,6 +1,7 @@
 #include <Servo.h>
 
 #define PIN_SRV 13
+#define SENSITIVITY 180
 #define PIN_L_PHTRSR A0
 #define PIN_R_PHTRSR A1
 
@@ -19,8 +20,8 @@ void loop()
 	l_phtrsr = analogRead(PIN_L_PHTRSR);
 	r_phtrsr = analogRead(PIN_R_PHTRSR);
 
-	l_phtrsr = map(l_phtrsr, 0, 1023, 0, 180);
-	r_phtrsr = map(r_phtrsr, 0, 1023, 0, 180);
+	l_phtrsr = map(l_phtrsr, 0, 1023, 0, SENSITIVITY);
+	r_phtrsr = map(r_phtrsr, 0, 1023, 0, SENSITIVITY);
 	
 	while (l_phtrsr != r_phtrsr)
 		if (l_phtrsr > r_phtrsr && srv_position < 180)
