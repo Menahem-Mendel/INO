@@ -1,60 +1,63 @@
-// эта версия псолнечного трэкера предназнасена
-// для медленного срабатывания слежки за солнцем
-// "это значит что медленно реагирует на смену места освещения"
-// что и нужно в данном случае
+// версия 0.1.0 солнечного трэкера
 
 #include <Servo.h>
 
-#define PIN_L_PHTRSR A0 // пин ввода: левый фоторезистор
-#define PIN_R_PHTRSR A1 // пин ввода: правый фоторезистор
-#define PIN_SRV 13		// пин вывода: на сервопривод
+#define PIN_L_LDR A0	// пин ввода: левый фоторезистор
+#define PIN_R_LDR A1	// пин ввода: правый фоторезистор
+#define PIN_UD_SRV 10   // пин вывода: на сервопривод up down
 #define SENSITIVITY 180 // чувствительность от 0 до n
+#define DTIME 25		// скорсть вращение. чем выше значение тем ниже скорость
 
-Servo _srv;   // сервопривод
-int l_phtrsr; // значения принимамые левым фоторезистором
-int r_phtrsr; // значения принимамые правым фоторезистором
+Servo ud_srv; // сервопривод up down
+int l_ldr;	// значения принимамые левым фоторезистором
+int r_ldr;	// значения принимамые правым фоторезистором
 
 void setup()
 {
-	_srv.attach(PIN_SRV); // определение переменной _srv на получение данных из PIN_SRV
+	ud_srv.attach(PIN_UD_SRV); // определение переменной ud_srv на получение данных из PIN_UD_SRV
 }
 
 void loop()
 {
-	l_phtrsr = analogRead(PIN_L_PHTRSR); // определение переменной l_phtrsr на получение данных из PIN_L_PHTRSR
-	r_phtrsr = analogRead(PIN_R_PHTRSR); // определение переменной r_phtrsr на получение данных из PIN_R_PHTRSR
+	if (ud_srv.attached())
+	{
+		l_ldr = analogRead(PIN_L_LDR); // определение переменной l_ldr на получение данных из PIN_L_LDR
+		r_ldr = analogRead(PIN_R_LDR); // определение переменной r_ldr на получение данных из PIN_R_LDR
 
-	l_phtrsr = map(l_phtrsr, 0, 1023, 0, SENSITIVITY); // настройка диапазона значений l_phtrsr
-	r_phtrsr = map(r_phtrsr, 0, 1023, 0, SENSITIVITY); // настройка диапазона значений r_phtrsr
-	movesrv(l_phtrsr, r_phtrsr);
+		l_ldr = map(l_ldr, 0, 1023, 0, SENSITIVITY); // настройка диапазона значений l_ldr
+		r_ldr = map(r_ldr, 0, 1023, 0, SENSITIVITY); // настройка диапазона значений r_ldr
+
+		movesrv(l_ldr, r_ldr);
+	}
+	else
+	{
+		// error
+	}
 }
 
-int srv_position = 0; // текущая позиция сервопривода
+int srv_position = ud_srv.read(); // текущая позиция сервопривода
 
 void movesrv(int l, int r)
 {
-	while (l != r)
-		if (l > r && srv_position < 180)
-		{
-			_srv.write(++srv_position);
-			delay(25);
-		}
+	if (l != r)
+	{
+		if (l > r && srv_position <= 180)
+			ud_srv.write(++srv_position);
 		else if (l < r && srv_position >= 0)
-		{
-			_srv.write(--srv_position);
-			delay(25);
-		}
+			ud_srv.write(--srv_position);
+		delay(DTIME);
+	}
 }
 
 /*
 поменять алгоритм на
-	l_phtrsr = map(l_phtrsr, 0, 1023, 0, SENSITIVITY);
-	r_phtrsr = map(r_phtrsr, 0, 1023, 0, SENSITIVITY);
+	l_ldr = map(l_ldr, 0, 1023, 0, SENSITIVITY);
+	r_ldr = map(r_ldr, 0, 1023, 0, SENSITIVITY);
 
-	srv_position += ((l_phtrsr - r_phtrsr) / 2)				резко
+	srv_position += ((l_ldr - r_ldr) / 2)				резко
 															деление на 2 нужно так как нам нужно равные значения в обих фоторезисторах
 		или
-	srv_position += ((l_phtrsr - r_phtrsr) / 2 > 0) ? 1 : -1		постепенно
+	srv_position += ((l_ldr - r_ldr) / 2 > 0) ? 1 : -1		постепенно
 	! если значение положительное то влево
 	! если значение отрицательно то вправо
 
