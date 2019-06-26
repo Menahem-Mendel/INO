@@ -8,28 +8,29 @@
 #define SENSITIVITY 180 // чувствительность фоторезистора от 0 до n, чем ниже значение тем выше чувствительность
 #define DTIME 1000		// скорсть реакции
 
-Servo servo; // сервопривод
+Servo servo_10; // сервопривод
 
 void setup()
 {
-	servo.attach(PINSERVO); // определение переменной servo на получение данных из PINSERVO
+	// определение переменных на получение данных по проводам
+	servo_10.attach(PINSERVO);
 	pinMode(A0, INPUT);
 	pinMode(A1, INPUT);
 }
 
-int leftLDR;	   // левый фоторезистор
-int rightLDR;	  // правый фоторезистор
-int servoPosition; // позиция сервопривода
+int leftLDR;  // левый фоторезистор
+int rightLDR; // правый фоторезистор
+int servoPos; // позиция сервопривода
 
 void loop()
 {
-	if (servo.attached())
+	if (servo_10.attached())
 	{
 		// определение переменных на получение данных
 		leftLDR = analogRead(PINLEFTLDR);
 		rightLDR = analogRead(PINRIGHTLDR);
 
-		servoPosition = servo.read();
+		servoPos = servo_10.read();
 
 		// настройка диапазона значений
 		leftLDR = map(leftLDR, 0, 3968, 0, SENSITIVITY);
@@ -43,19 +44,19 @@ void loop()
 			// если солнца мало опустить
 			if (leftLDR < SENSITIVITY - SENSITIVITY / 3 && rightLDR < SENSITIVITY - SENSITIVITY / 3)
 			{
-				servo.write(0);
+				servo_10.write(0);
 				break;
 			}
 
 			if (leftLDR > rightLDR)
-				++servoPosition;
+				++servoPos;
 			else if (leftLDR < rightLDR)
-				--servoPosition;
+				--servoPos;
 
-			if (servoPosition == 0 || servoPosition == 180)
+			if (servoPos == 0 || servoPos == 180)
 				break;
 
-			servo.write(servoPosition);
+			servo_10.write(servoPos);
 		}
 
 		delay(DTIME);
