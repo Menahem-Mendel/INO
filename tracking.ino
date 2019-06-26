@@ -58,37 +58,3 @@ void loop()
 		// error
 	}
 }
-
-#include <Servo.h>
-
-int leftLDR;
-int rightLDR;
-Servo servo;
-
-void setup()
-{
-	servo.attach(10);
-	pinMode(A0, INPUT);
-	pinMode(A1, INPUT);
-}
-
-int servoPosition = servo.read();
-
-void loop()
-{
-	leftLDR = analogRead(A0);
-	rightLDR = analogRead(A1);
-
-	while (leftLDR != rightLDR)
-	{
-		if (leftLDR > rightLDR && servoPosition <= 180)
-		{
-			servo.write(++servoPosition);
-		}
-		else if (leftLDR < rightLDR && servoPosition >= 0)
-		{
-			servo.write(--servoPosition);
-		}
-	}
-	delay(10);
-}
