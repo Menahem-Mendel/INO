@@ -41,7 +41,7 @@ void loop()
 			leftLDR = analogRead(PINLEFTLDR);
 			rightLDR = analogRead(PINRIGHTLDR);
 
-			// если солнца мало опустить
+			// если солнца мало, опустить
 			if (leftLDR < SENSITIVITY - SENSITIVITY / 3 && rightLDR < SENSITIVITY - SENSITIVITY / 3)
 			{
 				servo_10.write(0);
